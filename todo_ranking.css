@@ -1,0 +1,123 @@
+html {
+  font-size: 24px;
+}
+
+body {
+  font-family: "Dancing Script", cursive;
+}
+
+h1 {
+  color: cornflowerblue;
+  text-align: center;
+  font-weight: normal;
+  font-size: 3rem;
+}
+
+.listcontainer {
+  height: 15rem;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+  text-align: center;
+  display: grid;
+  margin: 0;
+  vertical-align: middle;
+  align-content: center;
+  height: 14rem;
+}
+
+li {
+  font-size: 1.5rem;
+  line-height: 1.6rem;
+  color: cornflowerblue;
+}
+
+li.selected {
+  line-height: 4rem;
+  z-index: 99;
+  position: relative;
+}
+
+button {
+  background: cornflowerblue;
+  font-family: "Dancing Script", cursive;
+  color: white;
+  font-size: 1.75rem;
+  border-radius: 0.3rem;
+  border: none;
+  display: block;
+  padding: 0.5rem;
+  margin: auto;
+}
+
+button:focus,
+button:hover,
+button:focus-visible {
+  color: cornflowerblue;
+  background: white;
+  border: cornflowerblue solid 0.1rem;
+  outline: none;
+}
+
+@keyframes blinking {
+  0% {
+    color: white;
+  }
+  100% {
+    color: e17daf;
+  }
+}
+
+.selected {
+  color: e17daf;
+  font-size: 4rem;
+  transition: all 1s;
+  animation: blinking 0.4s 5;
+  animation-delay: 1s;
+}
+
+.bubble {
+  color: #e17daf;
+  font-size: 1.5rem;
+  transition: all 0.3s;
+}
+
+li.bubble {
+  line-height: 2rem;
+}
+
+.visited {
+  color: #e17daf;
+}
+
+ul.sorted {
+  background: lavenderblush;
+  text-align: left;
+  margin: auto;
+  width: fit-content;
+  padding: 0 2rem;
+  border-radius: 1rem;
+  transition: all 1s;
+  animation: fade-in ease 4s;
+}
+
+ul.sorted li {
+  color: cornflowerblue;
+  line-height: 1.8rem;
+}
+
+.hidden {
+  display: none;
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}

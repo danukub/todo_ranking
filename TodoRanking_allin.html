@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Engagement&family=Shadows+Into+Light+Two&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      html {
+        font-size: 24px;
+      }
+
+      body {
+        font-family: "Dancing Script", cursive;
+      }
+
+      h1 {
+        color: cornflowerblue;
+        text-align: center;
+        font-weight: normal;
+        font-size: 3rem;
+      }
+
+      .listcontainer {
+        height: 15rem;
+      }
+
+      ul {
+        list-style-type: none;
+        padding: 0;
+        text-align: center;
+        display: grid;
+        margin: 0;
+        vertical-align: middle;
+        align-content: center;
+        height: 14rem;
+      }
+
+      li {
+        font-size: 1.5rem;
+        line-height: 1.6rem;
+        color: cornflowerblue;
+      }
+
+      li.selected {
+        line-height: 4rem;
+        z-index: 99;
+        position: relative;
+      }
+
+      button {
+        background: cornflowerblue;
+        font-family: "Dancing Script", cursive;
+        color: white;
+        font-size: 1.75rem;
+        border-radius: 0.3rem;
+        border: none;
+        display: block;
+        padding: 0.5rem;
+        margin: auto;
+      }
+
+      button:focus,
+      button:hover,
+      button:focus-visible {
+        color: cornflowerblue;
+        background: white;
+        border: cornflowerblue solid 0.1rem;
+        outline: none;
+      }
+
+      @keyframes blinking {
+        0% {
+          color: white;
+        }
+        100% {
+          color: e17daf;
+        }
+      }
+
+      .selected {
+        color: e17daf;
+        font-size: 4rem;
+        transition: all 1s;
+        animation: blinking 0.4s 5;
+        animation-delay: 1s;
+      }
+
+      .bubble {
+        color: #e17daf;
+        font-size: 1.5rem;
+        transition: all 0.3s;
+      }
+
+      li.bubble {
+        line-height: 2rem;
+      }
+
+      .visited {
+        color: #e17daf;
+      }
+
+      ul.sorted {
+        background: lavenderblush;
+        text-align: left;
+        margin: auto;
+        width: fit-content;
+        padding: 0 2rem;
+        border-radius: 1rem;
+        transition: all 1s;
+        animation: fade-in ease 4s;
+      }
+
+      ul.sorted li {
+        color: cornflowerblue;
+        line-height: 1.8rem;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      @keyframes fade-in {
+        0% {
+          opacity: 0;
+        }
+
+        100% {
+          opacity: 1;
+        }
+      }
+    </style>
+    <script>
+      var lis = [];
+      var team;
+      var rank = 1;
+      document.addEventListener("DOMContentLoaded", () => {
+        team = document.getElementById("team").getElementsByTagName("li");
+        initLis();
+      });
+
+      function initLis() {
+        lis = [];
+        Array.from(team).forEach((element) => {
+          if (!element.classList.contains("visited")) {
+            lis.push(element.innerHTML);
+          }
+        });
+        if (lis.length <= 1) {
+          finishRanking();
+        }
+      }
+
+      function finishRanking() {
+        selectTodo();
+        sortEntriesByRank();
+        document.getElementById("rollbutton").classList.add("hidden");
+        document.getElementById("resetbutton").classList.remove("hidden");
+      }
+
+      function sortEntriesByRank() {
+        ul = document.getElementById("team");
+        ul.classList.add("sorted");
+        var new_ul = ul.cloneNode(false);
+
+        // Add all lis to an array
+        var lis = [];
+        for (var i = 0; i < ul.childNodes.length; i++) {
+          if (ul.childNodes[i].nodeName === "LI") lis.push(ul.childNodes[i]);
+        }
+
+        // Sort the lis in descending order
+        lis.sort(function (a, b) {
+          return (
+            parseInt(a.childNodes[0].data, 10) -
+            parseInt(b.childNodes[0].data, 10)
+          );
+        });
+
+        // Add them into the ul in order
+        for (var i = 0; i < lis.length; i++) new_ul.appendChild(lis[i]);
+        ul.parentNode.replaceChild(new_ul, ul);
+      }
+
+      async function rankTheseTodos() {
+        await visitTodos();
+      }
+
+      async function visitTodos() {
+        while (lis.length > 1) {
+          await doBubbling().then(async () => selectTodo());
+        }
+      }
+
+      async function selectTodo() {
+        removeHighlights();
+        highlight(lis[getRandomInt(lis.length)], Highlighter.Selected);
+        await sleep(2000);
+      }
+
+      async function doBubbling() {
+        for (let step = 0; step < lis.length * 5; step++) {
+          const a = await bubble();
+        }
+      }
+
+      async function bubble() {
+        await sleep(200).then(() => {
+          removeHighlights();
+          highlight(lis[getRandomInt(lis.length)], Highlighter.Bubble);
+        });
+      }
+
+      function sleep(ms) {
+        return new Promise((resolve) => setTimeout(resolve, ms));
+      }
+
+      function removeHighlights() {
+        for (let member of team) {
+          member.classList.remove("selected", "bubble");
+        }
+      }
+
+      function highlight(member, highlighter) {
+        for (let item of team) {
+          if (item.innerHTML == member) {
+            item.classList.add(highlighter.name);
+            if (highlighter == Highlighter.Selected) {
+              setVisited(item);
+            }
+          }
+        }
+      }
+
+      function setVisited(item) {
+        item.classList.add("visited");
+        let innerHtml = item.innerHTML;
+        item.innerHTML = `${rank++} - ${innerHtml}`;
+        initLis();
+      }
+
+      function getRandomInt(max) {
+        return Math.floor(Math.random() * max);
+      }
+
+      function reset() {
+        location.reload();
+      }
+
+      class Highlighter {
+        static Bubble = new Highlighter("bubble");
+        static Selected = new Highlighter("selected");
+
+        constructor(name) {
+          this.name = name;
+        }
+        toString() {
+          return this.name;
+        }
+      }
+    </script>
+  </head>
+
+  <body>
+    <h1>what shall i do when?</h1>
+
+    <div class="listcontainer">
+      <ul id="team">
+        <li>play the piano</li>
+        <li>practice math</li>
+        <li>crafting</li>
+        <li>read some</li>
+        <li>whatch some film</li>
+        <li>clean up my room</li>
+      </ul>
+    </div>
+
+    <p>
+      <button id="rollbutton" onclick="rankTheseTodos();" title="roll the dice">
+        roll the dice
+      </button>
+      <button id="resetbutton" onclick="reset();" class="hidden" title="again">
+        again
+      </button>
+    </p>
+  </body>
+</html>

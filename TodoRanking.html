@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Engagement&family=Shadows+Into+Light+Two&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="todo_ranking.css" />
+    <script src="todo_ranking.js"></script>
+  </head>
+
+  <body>
+    <h1>what shall i do when?</h1>
+
+    <div class="listcontainer">
+      <ul id="team">
+        <li>play the piano</li>
+        <li>practice math</li>
+        <li>crafting</li>
+        <li>read some</li>
+        <li>whatch some film</li>
+        <li>clean up my room</li>
+      </ul>
+    </div>
+
+    <p>
+      <button id="rollbutton" onclick="rankTheseTodos();" title="roll the dice">
+        roll the dice
+      </button>
+      <button id="resetbutton" onclick="reset();" class="hidden" title="again">
+        again
+      </button>
+    </p>
+  </body>
+</html>

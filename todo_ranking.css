@@ -50,6 +50,7 @@ button {
   display: block;
   padding: 0.5rem;
   margin: auto;
+  animation: fade-in ease-in-out 0.5s;
 }
 
 button:focus,
@@ -100,7 +101,8 @@ ul.sorted {
   padding: 0 2rem;
   border-radius: 1rem;
   transition: all 1s;
-  animation: fade-in ease 4s;
+  box-shadow: 0.5rem 0.5rem 1rem lightsteelblue;
+  animation: fade-in ease 2s;
 }
 
 ul.sorted li {
@@ -109,7 +111,9 @@ ul.sorted li {
 }
 
 .hidden {
-  display: none;
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s 0.5s, opacity 0.5s linear;
 }
 
 @keyframes fade-in {

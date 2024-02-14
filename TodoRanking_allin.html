@@ -59,6 +59,7 @@
         display: block;
         padding: 0.5rem;
         margin: auto;
+        animation: fade-in ease-in-out 0.5s;
       }
 
       button:focus,
@@ -109,7 +110,8 @@
         padding: 0 2rem;
         border-radius: 1rem;
         transition: all 1s;
-        animation: fade-in ease 4s;
+        box-shadow: 0.5rem 0.5rem 1rem lightsteelblue;
+        animation: fade-in ease 2s;
       }
 
       ul.sorted li {
@@ -118,7 +120,9 @@
       }
 
       .hidden {
-        display: none;
+        visibility: hidden;
+        opacity: 0;
+        transition: visibility 0s 0.5s, opacity 0.5s linear;
       }
 
       @keyframes fade-in {
@@ -152,14 +156,18 @@
         }
       }
 
-      function finishRanking() {
+      async function finishRanking() {
         selectTodo();
-        sortEntriesByRank();
-        document.getElementById("rollbutton").classList.add("hidden");
-        document.getElementById("resetbutton").classList.remove("hidden");
+        await sortEntriesByRank()
+          .then(() => sleep(2000))
+          .then(() => showButton("resetbutton"));
       }
 
-      function sortEntriesByRank() {
+      function showButton(buttonid) {
+        document.getElementById(buttonid).classList.remove("hidden");
+      }
+
+      async function sortEntriesByRank() {
         ul = document.getElementById("team");
         ul.classList.add("sorted");
         var new_ul = ul.cloneNode(false);
@@ -184,19 +192,21 @@
       }
 
       async function rankTheseTodos() {
+        document.getElementById("rollbutton").classList.add("hidden");
         await visitTodos();
       }
 
       async function visitTodos() {
         while (lis.length > 1) {
-          await doBubbling().then(async () => selectTodo());
+          await doBubbling()
+            .then(async () => selectTodo())
+            .then(() => sleep(2000));
         }
       }
 
       async function selectTodo() {
         removeHighlights();
         highlight(lis[getRandomInt(lis.length)], Highlighter.Selected);
-        await sleep(2000);
       }
 
       async function doBubbling() {

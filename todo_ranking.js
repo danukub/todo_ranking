@@ -18,14 +18,16 @@ function initLis() {
   }
 }
 
-function finishRanking() {
+async function finishRanking() {
   selectTodo();
-  sortEntriesByRank();
-  document.getElementById("rollbutton").classList.add("hidden");
-  document.getElementById("resetbutton").classList.remove("hidden");
+  await sortEntriesByRank().then(() => sleep(2000)).then(() => showButton('resetbutton'));
 }
 
-function sortEntriesByRank() {
+function showButton(buttonid) {
+  document.getElementById(buttonid).classList.remove("hidden");
+}
+
+async function sortEntriesByRank() {
   ul = document.getElementById("team");
   ul.classList.add("sorted");
   var new_ul = ul.cloneNode(false);
@@ -50,19 +52,19 @@ function sortEntriesByRank() {
 }
 
 async function rankTheseTodos() {
+  document.getElementById('rollbutton').classList.add('hidden');
   await visitTodos();
 }
 
 async function visitTodos() {
   while (lis.length > 1) {
-    await doBubbling().then(async () => selectTodo());
+    await doBubbling().then(async () => selectTodo()).then(() => sleep(2000));
   }
 }
 
 async function selectTodo() {
   removeHighlights();
   highlight(lis[getRandomInt(lis.length)], Highlighter.Selected);
-  await sleep(2000);
 }
 
 async function doBubbling() {

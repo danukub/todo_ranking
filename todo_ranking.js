@@ -4,7 +4,17 @@ var rank = 1;
 document.addEventListener("DOMContentLoaded", () => {
   team = document.getElementById("team").getElementsByTagName("li");
   initLis();
+  setHeightofContainer();
 });
+
+function setHeightofContainer() {
+  var container = document.getElementById('listcontainer');
+  var listheight = document.getElementById('team').offsetHeight;
+  console.log(listheight);
+
+  container.style.height = (listheight + 80) + 'px';
+
+}
 
 function initLis() {
   lis = [];
@@ -20,11 +30,12 @@ function initLis() {
 
 async function finishRanking() {
   selectTodo();
-  await sortEntriesByRank().then(() => sleep(2000)).then(() => showButton('resetbutton'));
+  await sortEntriesByRank().then(() => sleep(2000)).then(() => handleButtons());
 }
 
-function showButton(buttonid) {
-  document.getElementById(buttonid).classList.remove("hidden");
+function handleButtons() {
+  document.getElementById('rollbutton').classList.add('removed');
+  document.getElementById('resetbutton').classList.remove('hidden');
 }
 
 async function sortEntriesByRank() {

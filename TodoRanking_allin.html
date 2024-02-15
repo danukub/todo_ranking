@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <link
-      href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Engagement&family=Shadows+Into+Light+Two&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap"
       rel="stylesheet"
     />
     <style>
@@ -12,7 +12,7 @@
       }
 
       body {
-        font-family: "Dancing Script", cursive;
+        font-family: "Architects Daughter", cursive;
       }
 
       h1 {
@@ -20,10 +20,11 @@
         text-align: center;
         font-weight: normal;
         font-size: 3rem;
+        margin-bottom: 0;
       }
 
       .listcontainer {
-        height: 15rem;
+        display: flex;
       }
 
       ul {
@@ -31,10 +32,9 @@
         padding: 0;
         text-align: center;
         display: grid;
-        margin: 0;
+        margin: auto;
         vertical-align: middle;
         align-content: center;
-        height: 14rem;
       }
 
       li {
@@ -51,7 +51,7 @@
 
       button {
         background: cornflowerblue;
-        font-family: "Dancing Script", cursive;
+        font-family: "Architects Daughter", cursive;
         color: white;
         font-size: 1.75rem;
         border-radius: 0.3rem;
@@ -107,7 +107,7 @@
         text-align: left;
         margin: auto;
         width: fit-content;
-        padding: 0 2rem;
+        padding: 1rem 2rem;
         border-radius: 1rem;
         transition: all 1s;
         box-shadow: 0.5rem 0.5rem 1rem lightsteelblue;
@@ -116,13 +116,16 @@
 
       ul.sorted li {
         color: cornflowerblue;
-        line-height: 1.8rem;
       }
 
       .hidden {
         visibility: hidden;
         opacity: 0;
         transition: visibility 0s 0.5s, opacity 0.5s linear;
+      }
+
+      .removed {
+        display: none;
       }
 
       @keyframes fade-in {
@@ -142,7 +145,16 @@
       document.addEventListener("DOMContentLoaded", () => {
         team = document.getElementById("team").getElementsByTagName("li");
         initLis();
+        setHeightofContainer();
       });
+
+      function setHeightofContainer() {
+        var container = document.getElementById("listcontainer");
+        var listheight = document.getElementById("team").offsetHeight;
+        console.log(listheight);
+
+        container.style.height = listheight + 80 + "px";
+      }
 
       function initLis() {
         lis = [];
@@ -160,11 +172,12 @@
         selectTodo();
         await sortEntriesByRank()
           .then(() => sleep(2000))
-          .then(() => showButton("resetbutton"));
+          .then(() => handleButtons());
       }
 
-      function showButton(buttonid) {
-        document.getElementById(buttonid).classList.remove("hidden");
+      function handleButtons() {
+        document.getElementById("rollbutton").classList.add("removed");
+        document.getElementById("resetbutton").classList.remove("hidden");
       }
 
       async function sortEntriesByRank() {
@@ -275,7 +288,7 @@
   <body>
     <h1>what shall i do when?</h1>
 
-    <div class="listcontainer">
+    <div id="listcontainer" class="listcontainer">
       <ul id="team">
         <li>play the piano</li>
         <li>practice math</li>

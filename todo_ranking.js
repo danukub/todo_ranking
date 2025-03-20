@@ -1,24 +1,23 @@
 var lis = [];
-var team;
+var todos;
 var rank = 1;
 document.addEventListener("DOMContentLoaded", () => {
-  team = document.getElementById("team").getElementsByTagName("li");
+  todos = document.getElementById("todos").getElementsByTagName("li");
   initLis();
   setHeightofContainer();
 });
 
 function setHeightofContainer() {
-  var container = document.getElementById('listcontainer');
-  var listheight = document.getElementById('team').offsetHeight;
+  var container = document.getElementById("listcontainer");
+  var listheight = document.getElementById("todos").offsetHeight;
   console.log(listheight);
 
-  container.style.height = (listheight + 80) + 'px';
-
+  container.style.height = listheight + 80 + "px";
 }
 
 function initLis() {
   lis = [];
-  Array.from(team).forEach((element) => {
+  Array.from(todos).forEach((element) => {
     if (!element.classList.contains("visited")) {
       lis.push(element.innerHTML);
     }
@@ -30,16 +29,18 @@ function initLis() {
 
 async function finishRanking() {
   selectTodo();
-  await sortEntriesByRank().then(() => sleep(2000)).then(() => handleButtons());
+  await sortEntriesByRank()
+    .then(() => sleep(2000))
+    .then(() => handleButtons());
 }
 
 function handleButtons() {
-  document.getElementById('rollbutton').classList.add('removed');
-  document.getElementById('resetbutton').classList.remove('hidden');
+  document.getElementById("rollbutton").classList.add("removed");
+  document.getElementById("resetbutton").classList.remove("hidden");
 }
 
 async function sortEntriesByRank() {
-  ul = document.getElementById("team");
+  ul = document.getElementById("todos");
   ul.classList.add("sorted");
   var new_ul = ul.cloneNode(false);
 
@@ -52,8 +53,7 @@ async function sortEntriesByRank() {
   // Sort the lis in descending order
   lis.sort(function (a, b) {
     return (
-      parseInt(a.childNodes[0].data, 10) -
-      parseInt(b.childNodes[0].data, 10)
+      parseInt(a.childNodes[0].data, 10) - parseInt(b.childNodes[0].data, 10)
     );
   });
 
@@ -63,13 +63,15 @@ async function sortEntriesByRank() {
 }
 
 async function rankTheseTodos() {
-  document.getElementById('rollbutton').classList.add('hidden');
+  document.getElementById("rollbutton").classList.add("hidden");
   await visitTodos();
 }
 
 async function visitTodos() {
   while (lis.length > 1) {
-    await doBubbling().then(async () => selectTodo()).then(() => sleep(2000));
+    await doBubbling()
+      .then(async () => selectTodo())
+      .then(() => sleep(2000));
   }
 }
 
@@ -79,7 +81,7 @@ async function selectTodo() {
 }
 
 async function doBubbling() {
-  for (let step = 0; step < lis.length * 5; step++) {
+  for (let step = 0; step < 10; step++) {
     const a = await bubble();
   }
 }
@@ -96,13 +98,13 @@ function sleep(ms) {
 }
 
 function removeHighlights() {
-  for (let member of team) {
+  for (let member of todos) {
     member.classList.remove("selected", "bubble");
   }
 }
 
 function highlight(member, highlighter) {
-  for (let item of team) {
+  for (let item of todos) {
     if (item.innerHTML == member) {
       item.classList.add(highlighter.name);
       if (highlighter == Highlighter.Selected) {
